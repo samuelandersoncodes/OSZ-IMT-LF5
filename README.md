@@ -23,18 +23,24 @@
 - Class Model (matches UML diagram)
 
 ### Applying OOP
+#### Object diagram
+![Diagram](doc/final-project-objectdiagram.png)
 
-- Inheritance
-Person → Borrower, Staff; Staff → Clerk, Librarian; Book → TextBook, Novel, Reference
+#### Class diagram
+![Diagram](doc/final-project-classdiagram.png)
 
-- Polymorphism
-different loan limits (Borrower vs Staff), different loan periods (TextBook 14‑day / Novel 21‑day / Reference 7‑day)
+#### Applied OOP Principles
+##### Inheritance
+- Person → Borrower, Staff; Staff → Clerk, Librarian; Book → TextBook, Novel, Reference
 
-- Encapsulation
-private fields + getters/setters; validation inside constructors and setters
+##### Polymorphism
+- different loan limits (Borrower vs Staff), different loan periods (TextBook 14‑day / Novel 21‑day / Reference 7‑day)
 
-- Abstraction
-Person, Book, and Staff declared abstract; Borrowable interface (future)
+##### Encapsulation
+- private fields + getters/setters; validation inside constructors and setters
+
+##### Abstraction
+- Person, Book, and Staff declared abstract; Borrowable interface (future)
 
 ### Class Structure
 
@@ -66,7 +72,7 @@ Library — façade/service holding all collections and orchestrating operations
 
 LibrarySystem — CLI menu driver
 
-### Key Methods (selected)
+#### Key Methods (selected)
 
 - Library
 addBook(), removeBook(), searchBooks(), registerUser(), placeHold(), issueBook(), returnBook(), renewLoan(), displayOverdue(), generateUserReport()
@@ -80,7 +86,7 @@ getLoanPeriod(), issue(), placeOnHold(), returnBook()
 - Loan
 isOverdue(), calculateFine(), renew()
 
-### Data Structures
+### Data Structure
 - HashMap<String,Book> — book catalogue (key=ISBN/bookId)
 - HashMap<String,Person> — user registry (key=userId)
 - ArrayList<HoldRequest> — global & per‑book hold queues
