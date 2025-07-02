@@ -48,18 +48,75 @@ public class LibrarySystem {
     }
 
     /** Prints the main menu to stdout. */
+    private static final String ANSI_RESET  = "\u001B[0m";
+    private static final String ANSI_BLUE   = "\u001B[34m";
+    private static final String ANSI_CYAN   = "\u001B[36m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+
     private void printMenu() {
-        System.out.println("""
-            \n===---===---===---===---- Library  System -----===---===---===---===---===
-            1) Add Book      2) Remove Book    3) Search Books   4) Display All Books
-              5) Register Borrower    6) Register Librarian    7) Display All Users
-                 8) Place Hold    9) List Holds for Book      10) Issue Book  
-                    11) Renew Loan    12) Return Book   13) Overdue Loans
-                                      14) Borrower History
-                                             0) Exit
-            -------------------------------------------------------------------------
-            """);
-        System.out.print("Choice> ");
+        int width = 64;                               // total inner width
+        String hor = "─".repeat(width);
+        // Box top
+        System.out.println(ANSI_CYAN + "┌" + hor + "┐" + ANSI_RESET);
+
+        // Title
+        String title = "📚 LIBRARY MANAGEMENT SYSTEM 📚";
+        System.out.println(ANSI_CYAN + "│" +
+                center(title, width) +
+                "│" + ANSI_RESET);
+
+        // Separator
+        System.out.println(ANSI_CYAN + "├" + hor + "┤" + ANSI_RESET);
+
+        // Menu items
+        String[][] items = {
+                {"1) Add Book",            "8)  Place Hold"},
+                {"2) Remove Book",         "9)  List Holds for Book"},
+                {"3) Search Books",        "10) Issue Book"},
+                {"4) Display All Books",   "11) Renew Loan"},
+                {"5) Register Borrower",   "12) Return Book"},
+                {"6) Register Librarian",  "13) Overdue Loans"},
+                {"7) Display All Users",   "14) Borrower History"},
+        };
+
+        // Print two columns
+        int colWidth = (width - 3) / 2;  // leave 1 space padding and 1 between columns
+        for (var row : items) {
+            String left  = padRight(row[0], colWidth);
+            String right = padRight(row[1], colWidth);
+            System.out.println(ANSI_CYAN + "│ "
+                    + ANSI_BLUE + left  + ANSI_RESET + " "
+                    + ANSI_BLUE + right + ANSI_RESET
+                    + " │");
+        }
+
+        // Separator before exit
+        System.out.println(ANSI_CYAN + "├" + hor + "┤" + ANSI_RESET);
+
+        // Exit centered
+        String exit = "0) Exit";
+        System.out.println(ANSI_CYAN + "│"
+                + center(exit, width)
+                + "│" + ANSI_RESET);
+
+        // Box bottom
+        System.out.println(ANSI_CYAN + "└" + hor + "┘" + ANSI_RESET);
+
+        // Prompt
+        System.out.print(ANSI_YELLOW + "Choice> " + ANSI_RESET);
+    }
+
+    /** Centers s in a field of width w, padding with spaces. */
+    private static String center(String s, int w) {
+        if (s.length() >= w) return s.substring(0, w);
+        int pad = (w - s.length()) / 2;
+        return " ".repeat(pad) + s + " ".repeat(w - pad - s.length());
+    }
+
+    /** Pads s on the right with spaces to exactly width w. */
+    private static String padRight(String s, int w) {
+        if (s.length() >= w) return s.substring(0, w);
+        return s + " ".repeat(w - s.length());
     }
 
     /** Prompts for details and adds a new book. */
