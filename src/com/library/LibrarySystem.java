@@ -50,13 +50,14 @@ public class LibrarySystem {
     /** Prints the main menu to stdout. */
     private void printMenu() {
         System.out.println("""
-            \n=== Library System ===
+            \n===---===---===---===---- Library  System -----===---===---===---===---===
             1) Add Book      2) Remove Book    3) Search Books   4) Display All Books
-            5) Register Borrower    6) Register Librarian    7) Display All Users
-            8) Place Hold    9) List Holds for Book
-            10) Issue Book   11) Renew Loan    12) Return Book   13) Overdue Loans
-            14) Borrower History
-            0) Exit
+              5) Register Borrower    6) Register Librarian    7) Display All Users
+                 8) Place Hold    9) List Holds for Book      10) Issue Book  
+                    11) Renew Loan    12) Return Book   13) Overdue Loans
+                                      14) Borrower History
+                                             0) Exit
+            -------------------------------------------------------------------------
             """);
         System.out.print("Choice> ");
     }
