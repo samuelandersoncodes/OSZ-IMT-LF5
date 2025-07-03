@@ -183,8 +183,12 @@ public class LibrarySystem {
 
     /** Lists all books in the catalog. */
     private void listBooks() {
-        lib.listBooks()
-                .forEach(Book::printInfo);
+        var books = lib.listBooks();
+        if (books.isEmpty()) {
+            System.out.println("ℹ️  There are currently no books in the catalog. Returning to main menu...");
+            return;
+        }
+        books.forEach(Book::printInfo);
     }
 
     /** Registers a new borrower with minimal info. */
