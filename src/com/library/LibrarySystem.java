@@ -166,11 +166,19 @@ public class LibrarySystem {
         }
     }
 
-    /** Prompts for a keyword and searches the catalog. */
+    /**
+     * Prompts for a search keyword, displays matching books,
+     * or shows an error and returns if no matches are found.
+     */
     private void searchBooks() {
         System.out.print("Keyword: ");
-        lib.searchBooks(in.nextLine())
-                .forEach(Book::printInfo);
+        String keyword = in.nextLine().trim();
+        var results = lib.searchBooks(keyword);
+        if (results.isEmpty()) {
+            System.out.println("❌ No book(s) found matching \"" + keyword + "\". Returning to main menu...");
+            return;
+        }
+        results.forEach(Book::printInfo);
     }
 
     /** Lists all books in the catalog. */
