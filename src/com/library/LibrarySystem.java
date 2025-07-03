@@ -119,26 +119,38 @@ public class LibrarySystem {
         return s + " ".repeat(w - s.length());
     }
 
-    /** Prompts for details and adds a new book. */
+    /**
+     * Prompts the user step-by-step to add a new book.
+     * If an unknown type is entered, prints an error and returns to main menu.
+     */
     private void addBook() {
-        System.out.print("Book ID: ");      String id     = in.nextLine();
-        System.out.print("Title: ");        String title  = in.nextLine();
-        System.out.print("Author: ");       String author = in.nextLine();
-        System.out.print("Subject: ");      String subj   = in.nextLine();
-        System.out.print("Type (1=TextBook,2=Novel,3=Reference): ");
-        String t = in.nextLine();
-        Book b = switch (t) {
-            case "1" -> new TextBook(id, title, author, subj);
-            case "2" -> new Novel(id, title, author, subj);
-            case "3" -> new Reference(id, title, author, subj);
-            default  -> null;
-        };
-        if (b != null) {
-            lib.addBook(b);
-            System.out.println("✅ Book added");
-        } else {
-            System.out.println("❌ Unknown type");
+        System.out.print("Book ID: ");
+        String id = in.nextLine().trim();
+        System.out.print("Title: ");
+        String title = in.nextLine().trim();
+        System.out.print("Author: ");
+        String author = in.nextLine().trim();
+        System.out.print("Subject: ");
+        String subject = in.nextLine().trim();
+        System.out.print("Type (1=TextBook, 2=Novel, 3=Reference): ");
+        String type = in.nextLine().trim();
+        Book book;
+        switch (type) {
+            case "1":
+                book = new TextBook(id, title, author, subject);
+                break;
+            case "2":
+                book = new Novel(id, title, author, subject);
+                break;
+            case "3":
+                book = new Reference(id, title, author, subject);
+                break;
+            default:
+                System.out.println("❌ Invalid input. Returning to main menu...");
+                return;
         }
+        lib.addBook(book);
+        System.out.println("✅ Book " + book.getTitle() + " added");
     }
 
     /** Prompts for a book ID and removes it. */
