@@ -27,9 +27,10 @@ public class Library {
     /**
      * Removes a book from the catalog.
      * @param bookId unique ID of the book
+     * @return the removed Book, or null if none existed
      */
-    public void removeBook(String bookId) {
-        catalog.remove(bookId);
+    public Book removeBook(String bookId) {
+        return catalog.remove(bookId);
     }
 
     /**

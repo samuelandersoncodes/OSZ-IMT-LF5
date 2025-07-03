@@ -150,14 +150,20 @@ public class LibrarySystem {
                 return;
         }
         lib.addBook(book);
-        System.out.println("✅ Book " + book.getTitle() + " added");
+        System.out.println("✅ Book: " + book.getTitle() + " added successfully");
     }
 
     /** Prompts for a book ID and removes it. */
     private void removeBook() {
         System.out.print("Book ID: ");
-        lib.removeBook(in.nextLine());
-        System.out.println("✅ If it existed, it's gone.");
+        String id = in.nextLine().trim();
+        Book removed = lib.removeBook(id);
+        if (removed != null) {
+            System.out.println("✅ Book: " + removed.getTitle() + " is removed");
+        } else {
+            System.out.println("❌ No book with ID: " + id + " was found");
+            return;
+        }
     }
 
     /** Prompts for a keyword and searches the catalog. */
