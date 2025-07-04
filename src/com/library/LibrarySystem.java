@@ -4,6 +4,8 @@ import com.library.model.*;
 
 import java.util.Scanner;
 
+import java.util.Optional;
+
 /**
  * Command‐line interface handling user interaction.
  */
@@ -233,8 +235,7 @@ public class LibrarySystem {
 
     /** Displays all registered users. */
     private void listUsers() {
-        lib.listUsers()
-                .forEach(Person::printInfo);
+        lib.listUsers().forEach(Person::printInfo);
     }
 
     /**
@@ -305,9 +306,24 @@ public class LibrarySystem {
 
     /** Renews an existing loan if eligible. */
     private void renewLoan() {
-        System.out.print("Borrower ID: "); String bid  = in.nextLine();
-        System.out.print("Book ID: ");     String bid2 = in.nextLine();
-        System.out.println(lib.renewLoan(bid, bid2) ? "✅ Renewed" : "❌ Failed");
+        System.out.print("Borrower ID: ");
+        String borrowerId  = in.nextLine().trim();
+        System.out.print("Book ID: ");
+        String bookId = in.nextLine().trim();
+        Optional<Loan> optLoan = lib.generateUserReport(borrowerId).stream().filter(l -> l.getBook().getBookId().equals(bookId))
+                .findFirst();
+        if (optLoan.isEmpty()) {
+            System.out.println("❌ No active loan for book ID: " + bookId);
+            return;
+        }
+        Loan loan = optLoan.get();
+        if (loan.isOverdue()) {
+            System.out.println("❌ Cannot renew—loan for book ID " + bookId + " is already overdue since "
+                    + loan.getDueDate().toLocalDate());
+            return;
+        }
+        loan.renew();
+        System.out.println("✅ Loan renewed! New due date: " + loan.getDueDate().toLocalDate());
     }
 
     /** Returns a borrowed book. */
