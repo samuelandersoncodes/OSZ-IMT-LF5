@@ -12,6 +12,7 @@ public class LibrarySystem {
     private final Scanner in;
 
     // sequence counters for auto-IDs
+    private int bookSeq;
     private int borrowerSeq;
     private int librarianSeq;
 
@@ -24,15 +25,13 @@ public class LibrarySystem {
         this.in  = in;
 
         /*
-        * Initialize ID sequence counters by counting already-registered users,
+        * Count seeded books so we start at the next available ID,
+        * initialize ID sequence counters by counting already-registered users,
         * so new auto-generated IDs won’t collide with seeded entries
         */
-        this.borrowerSeq = (int) lib.listUsers().stream()
-                .filter(u -> u instanceof Borrower)
-                .count();
-        this.librarianSeq = (int) lib.listUsers().stream()
-                .filter(u -> u instanceof Librarian)
-                .count();
+        this.bookSeq = lib.listBooks().size();
+        this.borrowerSeq = (int) lib.listUsers().stream().filter(u -> u instanceof Borrower).count();
+        this.librarianSeq = (int) lib.listUsers().stream().filter(u -> u instanceof Librarian).count();
     }
 
     /**
@@ -139,8 +138,6 @@ public class LibrarySystem {
      * If an unknown type is entered, prints an error and returns to main menu.
      */
     private void addBook() {
-        System.out.print("Book ID: ");
-        String id = in.nextLine().trim();
         System.out.print("Title: ");
         String title = in.nextLine().trim();
         System.out.print("Author: ");
@@ -149,23 +146,19 @@ public class LibrarySystem {
         String subject = in.nextLine().trim();
         System.out.print("Type (1=TextBook, 2=Novel, 3=Reference): ");
         String type = in.nextLine().trim();
+        String bookId = String.format("BK-%03d", ++bookSeq);
         Book book;
         switch (type) {
-            case "1":
-                book = new TextBook(id, title, author, subject);
-                break;
-            case "2":
-                book = new Novel(id, title, author, subject);
-                break;
-            case "3":
-                book = new Reference(id, title, author, subject);
-                break;
-            default:
-                System.out.println("❌ Invalid input. Returning to main menu...");
+            case "1" -> book = new TextBook(bookId, title, author, subject);
+            case "2" -> book = new Novel    (bookId, title, author, subject);
+            case "3" -> book = new Reference(bookId, title, author, subject);
+            default  -> {
+                System.out.println("❌ Invalid type. Returning to main menu...");
                 return;
+            }
         }
         lib.addBook(book);
-        System.out.println("✅ Book: " + book.getTitle() + " added successfully");
+        System.out.println("✅ Book: " + title + " with ID : " + bookId + " added successfully");
     }
 
     /** Prompts for a book ID and removes it. */
@@ -288,10 +281,19 @@ public class LibrarySystem {
                 .forEach(Loan::printInfo);
     }
 
-    /** Shows loan history for a specific borrower. */
+    /**
+     * Shows loan history for a specific borrower.
+     * If they have not borrowed anything yet, displays an informational message.
+     */
     private void userReport() {
         System.out.print("Borrower ID: ");
-        lib.generateUserReport(in.nextLine())
-                .forEach(Loan::printInfo);
+        String borrowerId = in.nextLine().trim();
+        var history = lib.generateUserReport(borrowerId);
+        if (history.isEmpty()) {
+            System.out.println("ℹ️  Borrower " + borrowerId + " has not borrowed any books yet.");
+            return;
+        }
+        System.out.println("📜 Borrowing history for " + borrowerId + ":");
+        history.forEach(Loan::printInfo);
     }
 }
