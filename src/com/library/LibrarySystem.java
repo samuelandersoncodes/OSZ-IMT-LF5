@@ -206,20 +206,36 @@ public class LibrarySystem {
         books.forEach(Book::printInfo);
     }
 
-    /** Registers a new borrower with minimal info. */
+    /**
+     * Registers a new borrower, prompting for name, email & phone,
+     * then auto-generating an ID like BOR-0004, etc.
+     */
     private void registerBorrower() {
-        System.out.print("ID: ");   String id   = in.nextLine();
-        System.out.print("Name: "); String name = in.nextLine();
-        lib.registerBorrower(new Borrower(id, name, "", ""));
-        System.out.println("✅ Borrower registered");
+        System.out.print("Name: ");
+        String name = in.nextLine().trim();
+        System.out.print("Email: ");
+        String email = in.nextLine().trim();
+        System.out.print("Phone: ");
+        String phone = in.nextLine().trim();
+        String id = String.format("BOR-%04d", ++borrowerSeq);
+        lib.registerBorrower(new Borrower(id, name, email, phone));
+        System.out.println("✅ Borrower " + name + " registered with ID " + id);
     }
 
-    /** Registers a new librarian with minimal info. */
+    /**
+     * Registers a new librarian, prompting for name, email & phone,
+     * then auto-generating an ID like LIB-0004, etc.
+     */
     private void registerLibrarian() {
-        System.out.print("ID: ");   String id   = in.nextLine();
-        System.out.print("Name: "); String name = in.nextLine();
-        lib.registerLibrarian(new Librarian(id, name, "", ""));
-        System.out.println("✅ Librarian registered");
+        System.out.print("Name: ");
+        String name = in.nextLine().trim();
+        System.out.print("Email: ");
+        String email = in.nextLine().trim();
+        System.out.print("Phone: ");
+        String phone = in.nextLine().trim();
+        String id = String.format("LIB-%04d", ++librarianSeq);
+        lib.registerLibrarian(new Librarian(id, name, email, phone));
+        System.out.println("✅ Librarian " + name + " registered with ID " + id);
     }
 
     /** Displays all registered users. */
