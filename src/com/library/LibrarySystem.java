@@ -329,6 +329,15 @@ public class LibrarySystem {
     private void userReport() {
         System.out.print("Borrower ID: ");
         String borrowerId = in.nextLine().trim();
+        Person user = lib.listUsers().stream().filter(u -> u.getId().equals(borrowerId)).findFirst().orElse(null);
+        if (user == null) {
+            System.out.println("❌ No user found with ID: " + borrowerId);
+            return;
+        }
+        if (!(user instanceof Borrower)) {
+            System.out.println("❌ User ID " + borrowerId + " is not a borrower.");
+            return;
+        }
         var history = lib.generateUserReport(borrowerId);
         if (history.isEmpty()) {
             System.out.println("ℹ️  Borrower " + borrowerId + " has not borrowed any books yet.");
