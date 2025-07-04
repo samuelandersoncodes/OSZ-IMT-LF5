@@ -244,14 +244,26 @@ public class LibrarySystem {
         System.out.println(lib.placeHold(bid, bid2) ? "✅ Hold placed" : "❌ Failed");
     }
 
-    /** Lists hold requests for a given book. */
+    /**
+     * Lists hold requests for a given book.
+     * If there are none, informs the user and returns.
+     *
+     * @param bookId the ID of the book to look up holds for
+     */
     private void listHolds() {
         System.out.print("Book ID: ");
-        lib.getHoldsForBook(in.nextLine())
-                .forEach(hr -> System.out.printf(
-                        "%s @ %s%n",
+        String bookId = in.nextLine().trim();
+        var holds = lib.getHoldsForBook(bookId);
+        if (holds.isEmpty()) {
+            System.out.println("ℹ️  There are currently no holds on book ID " + bookId + ".");
+            return;
+        }
+        System.out.println("📌 Holds for book " + bookId + ":");
+        holds.forEach(hr ->
+                System.out.printf(" • %s @ %s%n",
                         hr.getBorrower().getName(),
-                        hr.getRequestDate().toLocalDate()));
+                        hr.getRequestDate().toLocalDate())
+        );
     }
 
     /** Issues a book to a borrower by a librarian. */
