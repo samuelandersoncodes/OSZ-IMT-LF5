@@ -194,4 +194,13 @@ public class Library {
                 .filter(l -> l.getBorrower().getId().equals(borrowerId))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Look up a book by its ID.
+     * @param bookId the book's unique identifier
+     * @return the Book from the catalog, or null if not found
+     */
+    public Book getBook(String bookId) {
+        return catalog.get(bookId);
+    }
 }

@@ -276,12 +276,31 @@ public class LibrarySystem {
         );
     }
 
-    /** Issues a book to a borrower by a librarian. */
+    /** Issues a book to a borrower by a librarian.
+     * If it’s already issued, or IDs are invalid, prints an explicit message.
+     */
     private void issueBook() {
-        System.out.print("Borrower ID: ");  String bid  = in.nextLine();
-        System.out.print("Book ID: ");      String bid2 = in.nextLine();
-        System.out.print("Librarian ID: "); String lid  = in.nextLine();
-        System.out.println(lib.issueBook(bid, bid2, lid) ? "✅ Issued" : "❌ Failed");
+        System.out.print("Borrower ID: ");
+        String borrowerId  = in.nextLine().trim();
+        System.out.print("Book ID: ");
+        String bookId = in.nextLine().trim();
+        System.out.print("Librarian ID: ");
+        String librarianId  = in.nextLine().trim();
+        Book book = lib.getBook(bookId);
+        if (book == null) {
+            System.out.println("❌ No book found with ID: " + bookId);
+            return;
+        }
+        if (book.isIssued()) {
+            System.out.println("❌ Cannot issue—book " + bookId + " is already issued.");
+            return;
+        }
+        boolean ok = lib.issueBook(borrowerId, bookId, librarianId);
+        if (ok) {
+            System.out.println("✅ Issued book with ID : " + bookId + " to User with ID : " + borrowerId);
+        } else {
+            System.out.println("❌ Failed to issue. Check borrower ID, librarian ID, borrow limit, or hold queue.");
+        }
     }
 
     /** Renews an existing loan if eligible. */
