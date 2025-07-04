@@ -237,11 +237,21 @@ public class LibrarySystem {
                 .forEach(Person::printInfo);
     }
 
-    /** Places a hold for a borrower on a book. */
+    /**
+     * Places a hold for a borrower on a book.
+     * Only books currently issued can be placed on hold.
+     */
     private void placeHold() {
-        System.out.print("Borrower ID: "); String bid  = in.nextLine();
-        System.out.print("Book ID: ");     String bid2 = in.nextLine();
-        System.out.println(lib.placeHold(bid, bid2) ? "✅ Hold placed" : "❌ Failed");
+        System.out.print("Borrower ID: ");
+        String borrowerId = in.nextLine().trim();
+        System.out.print("Book ID: ");
+        String bookId = in.nextLine().trim();
+        boolean success = lib.placeHold(borrowerId, bookId);
+        if (success) {
+            System.out.println("✅ Hold placed for book ID : " + bookId);
+        } else {
+            System.out.println("❌ Failed! only books that are currently issued can be placed on hold.");
+        }
     }
 
     /**
