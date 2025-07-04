@@ -316,10 +316,17 @@ public class LibrarySystem {
         System.out.println(lib.returnBook(in.nextLine()) ? "✅ Returned" : "❌ Failed");
     }
 
-    /** Displays all overdue loans. */
+    /** Displays all overdue loans.
+     * informs the user if no overdue.
+     **/
     private void displayOverdue() {
-        lib.displayOverdue()
-                .forEach(Loan::printInfo);
+        var overdue = lib.displayOverdue();
+        if (overdue.isEmpty()) {
+            System.out.println("ℹ️ There are no overdue loans at the moment");
+            return;
+        }
+        System.out.println("⚠️  Overdue loans:");
+        overdue.forEach(Loan::printInfo);
     }
 
     /**
