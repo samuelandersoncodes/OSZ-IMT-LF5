@@ -11,6 +11,10 @@ public class LibrarySystem {
     private final Library lib;
     private final Scanner in;
 
+    // sequence counters for auto-IDs
+    private int borrowerSeq;
+    private int librarianSeq;
+
     /**
      * @param lib library service
      * @param in  input scanner (e.g. System.in)
@@ -18,6 +22,17 @@ public class LibrarySystem {
     public LibrarySystem(Library lib, Scanner in) {
         this.lib = lib;
         this.in  = in;
+
+        /*
+        * Initialize ID sequence counters by counting already-registered users,
+        * so new auto-generated IDs won’t collide with seeded entries
+        */
+        this.borrowerSeq = (int) lib.listUsers().stream()
+                .filter(u -> u instanceof Borrower)
+                .count();
+        this.librarianSeq = (int) lib.listUsers().stream()
+                .filter(u -> u instanceof Librarian)
+                .count();
     }
 
     /**
