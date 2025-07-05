@@ -162,21 +162,23 @@ public class Library {
     }
 
     /**
-     * Renews an existing loan.
+     * Renews a loan only if it exists and is not overdue.
      * @param borrowerId ID of the borrower
      * @param bookId     ID of the book
-     * @return true if renewed
+     * @return true if renewed ; false otherwise
      */
     public boolean renewLoan(String borrowerId, String bookId) {
-        Optional<Loan> maybe = activeLoans.stream()
-                .filter(l -> l.getBorrower().getId().equals(borrowerId)
-                        && l.getBook().getBookId().equals(bookId))
-                .findFirst();
-        if (maybe.isEmpty()) return false;
-        Loan loan = maybe.get();
-        if (loan.isOverdue()) return false;
-        loan.renew();
-        return true;
+        for (Loan loan : activeLoans) {
+            if (loan.getBorrower().getId().equals(borrowerId)
+                    && loan.getBook().getBookId().equals(bookId)) {
+                if (loan.isOverdue()) {
+                    return false;
+                }
+                loan.renew();
+                return true;
+            }
+        }
+        return false;
     }
 
     // Reports

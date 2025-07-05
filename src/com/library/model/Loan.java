@@ -35,7 +35,7 @@ public class Loan {
 
     /** Extends the due date by one loan period */
     public void renew() {
-        this.dueDate = LocalDateTime.now().plus(book.getLoanPeriod());
+        this.dueDate = this.dueDate.plus(book.getLoanPeriod());
     }
 
     /** Marks the loan as returned and updates the book */
