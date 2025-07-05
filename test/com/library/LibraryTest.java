@@ -172,4 +172,13 @@ public class LibraryTest {
         assertFalse(lib.issueBook("BOR-0002","BK-003","LIB-0001"),
                 "Second in queue must wait until first borrower returns");
     }
+
+    /**
+     * placeHold(...) must reject non-existent borrower or book IDs.
+     */
+    @Test
+    void testInvalidHoldRequests() {
+        assertFalse(lib.placeHold("NO-SUCH","BK-001"));
+        assertFalse(lib.placeHold("BOR-0001","NO-SUCH"));
+    }
 }
