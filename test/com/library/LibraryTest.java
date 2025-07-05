@@ -42,4 +42,16 @@ public class LibraryTest {
         assertSame(extra, removed, "removeBook should return the exact instance");
         assertNull(lib.removeBook("NO-SUCH"), "Removing unknown ID should return null");
     }
+
+    @Test
+    void testSearchBooks() {
+        List<Book> byTitle = lib.searchBooks("java");
+        assertEquals(3, byTitle.size(), "Three books contain 'java' in title");
+        List<Book> byAuthor = lib.searchBooks("Brown");
+        assertEquals(1, byAuthor.size());
+        assertEquals("BK-002", byAuthor.get(0).getBookId());
+        List<Book> byId = lib.searchBooks("BK-003");
+        assertEquals(1, byId.size());
+        assertEquals(reference, byId.get(0));
+    }
 }
