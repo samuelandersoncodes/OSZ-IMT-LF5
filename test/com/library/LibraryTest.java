@@ -149,4 +149,27 @@ public class LibraryTest {
         assertFalse(lib.issueBook("BOR-0001","BK-004","LIB-0001"),
                 "Borrower should be refused on 4th checkout beyond their limit");
     }
+
+    /**
+     * Ensures first‐in‐line hold gets the next available copy.
+     */
+    @Test
+    void testHoldQueuePriority() {
+        // register a second borrower
+        Borrower second = new Borrower("BOR-0002","Alex","alex@mail.com","557");
+        lib.registerBorrower(second);
+        // issue BK-003 to first borrower
+        assertTrue(lib.issueBook("BOR-0001","BK-003","LIB-0001"));
+        // both place holds
+        assertTrue(lib.placeHold("BOR-0001","BK-003"));   // Sam goes first
+        assertTrue(lib.placeHold("BOR-0002","BK-003"));   // Alex waits
+        // return the book
+        assertTrue(lib.returnBook("BK-003"));
+        // now only the first hold (Sam) should get it
+        assertTrue(lib.issueBook("BOR-0001","BK-003","LIB-0001"),
+                "First hold in queue should be able to issue immediately after return");
+        // second still cannot issue until Sam returns again
+        assertFalse(lib.issueBook("BOR-0002","BK-003","LIB-0001"),
+                "Second in queue must wait until first borrower returns");
+    }
 }
