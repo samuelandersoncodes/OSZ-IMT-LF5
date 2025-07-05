@@ -181,4 +181,19 @@ public class LibraryTest {
         assertFalse(lib.placeHold("NO-SUCH","BK-001"));
         assertFalse(lib.placeHold("BOR-0001","NO-SUCH"));
     }
+
+    /**
+     * generateUserReport(...) only returns active loans, not past returned ones.
+     */
+    @Test
+    void testGenerateUserReportActiveOnly() {
+        // no active loans initially
+        assertTrue(lib.generateUserReport("BOR-0001").isEmpty());
+        // issue then return
+        assertTrue(lib.issueBook("BOR-0001","BK-001","LIB-0001"));
+        assertTrue(lib.returnBook("BK-001"));
+        // active report is again empty
+        assertTrue(lib.generateUserReport("BOR-0001").isEmpty(),
+                "Returned loans should not appear in the active‐only report");
+    }
 }
