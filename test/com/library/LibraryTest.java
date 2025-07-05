@@ -17,13 +17,11 @@ public class LibraryTest {
     @BeforeEach
     void setUp() {
         lib = new Library();
-
         // seed one borrower and one librarian
         borrower  = new Borrower("BOR-0001", "Sam",  "sam@mail.com",  "555");
         librarian = new Librarian("LIB-0001","Mueller","mu@mail.com","556");
         lib.registerBorrower(borrower);
         lib.registerLibrarian(librarian);
-
         // seed three books
         textbook  = new TextBook  ("BK-001","Java Fundamentals","Evans","CS");
         novel     = new Novel     ("BK-002","The Java Saga",       "Brown","Fantasy");
@@ -33,6 +31,9 @@ public class LibraryTest {
         lib.addBook(reference);
     }
 
+    /**
+     * Verifies adding and removing books from the catalog.
+     */
     @Test
     void testAddAndRemoveBook() {
         TextBook extra = new TextBook("BK-999","Extra","X","S");
@@ -43,6 +44,9 @@ public class LibraryTest {
         assertNull(lib.removeBook("NO-SUCH"), "Removing unknown ID should return null");
     }
 
+    /**
+     * Searches case-insensitively by title, author and ID.
+     */
     @Test
     void testSearchBooks() {
         List<Book> byTitle = lib.searchBooks("java");
@@ -55,12 +59,18 @@ public class LibraryTest {
         assertEquals(reference, byId.get(0));
     }
 
+    /**
+     * Ensures listing books on an empty catalog returns an empty collection.
+     */
     @Test
     void testListBooksEmpty() {
         Library emptyLib = new Library();
         assertTrue(emptyLib.listBooks().isEmpty(), "New library should start with zero books");
     }
 
+    /**
+     * Registers borrowers and librarians and lists them correctly.
+     */
     @Test
     void testRegisterUsersAndList() {
         long borrowers = lib.listUsers().stream().filter(u -> u instanceof Borrower).count();
@@ -72,6 +82,9 @@ public class LibraryTest {
                 lib.listUsers().stream().filter(u -> u instanceof Borrower).count());
     }
 
+    /**
+     * Issues and returns books, verifying state changes and invalid operations.
+     */
     @Test
     void testIssueAndReturnBehavior() {
         assertTrue(lib.issueBook("BOR-0001","BK-001","LIB-0001"));
@@ -82,6 +95,9 @@ public class LibraryTest {
         assertFalse(lib.returnBook("BK-001"), "Cannot return a book that is not issued");
     }
 
+    /**
+     * Ensures a hold cannot be placed on an available book, then can when issued.
+     */
     @Test
     void testPlaceHoldAndListHolds() {
         assertFalse(lib.placeHold("BOR-0001","BK-002"),
@@ -93,6 +109,9 @@ public class LibraryTest {
         assertEquals(borrower, holds.get(0).getBorrower());
     }
 
+    /**
+     * Detects overdue loans by manipulating the due date.
+     */
     @Test
     void testOverdueDetection() {
         lib.issueBook("BOR-0001","BK-003","LIB-0001");
@@ -103,6 +122,9 @@ public class LibraryTest {
         assertTrue(overdue.get(0).isOverdue());
     }
 
+    /**
+     * Verifies renewing loans extends due date and forbids renewing overdue loans.
+     */
     @Test
     void testRenewalSuccessAndFailure() {
         lib.issueBook("BOR-0001","BK-001","LIB-0001");
@@ -116,6 +138,10 @@ public class LibraryTest {
                 "Cannot renew a loan that is already overdue");
     }
 
+    /**
+     * Ensures generateUserReport returns an empty list initially,
+     * then contains exactly one Loan after issuing a book.
+     */
     @Test
     void testGenerateUserReport() {
         assertTrue(lib.generateUserReport("BOR-0001").isEmpty());
@@ -125,6 +151,10 @@ public class LibraryTest {
         assertEquals("BK-001", report.get(0).getBook().getBookId());
     }
 
+    /**
+     * Verifies that issueBook and returnBook properly reject
+     * non-existent borrower, book or librarian IDs.
+     */
     @Test
     void testInvalidIDsInIssueAndReturn() {
         assertFalse(lib.issueBook("NOPE","BK-001","LIB-0001"));
