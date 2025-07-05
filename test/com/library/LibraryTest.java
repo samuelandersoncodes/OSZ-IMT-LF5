@@ -124,4 +124,12 @@ public class LibraryTest {
         assertEquals(1, report.size());
         assertEquals("BK-001", report.get(0).getBook().getBookId());
     }
+
+    @Test
+    void testInvalidIDsInIssueAndReturn() {
+        assertFalse(lib.issueBook("NOPE","BK-001","LIB-0001"));
+        assertFalse(lib.issueBook("BOR-0001","NOPE","LIB-0001"));
+        assertFalse(lib.issueBook("BOR-0001","BK-001","NOPE"));
+        assertFalse(lib.returnBook("NOPE"));
+    }
 }
