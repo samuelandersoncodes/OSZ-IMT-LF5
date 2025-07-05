@@ -60,4 +60,11 @@ public class Loan {
                 book.getTitle(),
                 dueDate.toLocalDate());
     }
+
+    /**
+     * force‐set the due date for test.
+     */
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
 }
