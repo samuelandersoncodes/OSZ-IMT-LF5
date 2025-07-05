@@ -118,7 +118,12 @@ isOverdue(), calculateFine(), renew()
 
 ### Testing
 
+#### Manual testing
 Pre‑populate a mix of TextBook, Novel, Reference records
 Add at least one Borrower, one Clerk, one Librarian
 Seed a loan and a hold request to validate overdue and queue logic
+
+#### Automated testing (unittest result)
+![Diagram](doc/unittest-result.png)
+
 
