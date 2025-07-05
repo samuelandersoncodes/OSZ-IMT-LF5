@@ -168,12 +168,15 @@ public class Library {
      * @return true if renewed
      */
     public boolean renewLoan(String borrowerId, String bookId) {
-        return activeLoans.stream()
+        Optional<Loan> maybe = activeLoans.stream()
                 .filter(l -> l.getBorrower().getId().equals(borrowerId)
                         && l.getBook().getBookId().equals(bookId))
-                .peek(Loan::renew)
-                .findFirst()
-                .isPresent();
+                .findFirst();
+        if (maybe.isEmpty()) return false;
+        Loan loan = maybe.get();
+        if (loan.isOverdue()) return false;
+        loan.renew();
+        return true;
     }
 
     // Reports
