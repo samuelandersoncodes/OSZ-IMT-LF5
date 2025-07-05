@@ -81,4 +81,15 @@ public class LibraryTest {
         assertFalse(textbook.isIssued(), "Book should no longer be issued after return");
         assertFalse(lib.returnBook("BK-001"), "Cannot return a book that is not issued");
     }
+
+    @Test
+    void testPlaceHoldAndListHolds() {
+        assertFalse(lib.placeHold("BOR-0001","BK-002"),
+                "Cannot place hold on book that is not issued yet");
+        lib.issueBook("BOR-0001","BK-002","LIB-0001");
+        assertTrue(lib.placeHold("BOR-0001","BK-002"));
+        List<HoldRequest> holds = lib.getHoldsForBook("BK-002");
+        assertEquals(1, holds.size());
+        assertEquals(borrower, holds.get(0).getBorrower());
+    }
 }
