@@ -115,4 +115,13 @@ public class LibraryTest {
         assertFalse(lib.renewLoan("BOR-0001","BK-001"),
                 "Cannot renew a loan that is already overdue");
     }
+
+    @Test
+    void testGenerateUserReport() {
+        assertTrue(lib.generateUserReport("BOR-0001").isEmpty());
+        lib.issueBook("BOR-0001","BK-001","LIB-0001");
+        List<Loan> report = lib.generateUserReport("BOR-0001");
+        assertEquals(1, report.size());
+        assertEquals("BK-001", report.get(0).getBook().getBookId());
+    }
 }
