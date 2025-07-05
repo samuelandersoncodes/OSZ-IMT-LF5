@@ -92,4 +92,14 @@ public class LibraryTest {
         assertEquals(1, holds.size());
         assertEquals(borrower, holds.get(0).getBorrower());
     }
+
+    @Test
+    void testOverdueDetection() {
+        lib.issueBook("BOR-0001","BK-003","LIB-0001");
+        Loan loan = borrower.getLoans().get(0);
+        loan.setDueDate(LocalDateTime.now().minusDays(5));
+        List<Loan> overdue = lib.displayOverdue();
+        assertEquals(1, overdue.size(), "Should detect exactly one overdue loan");
+        assertTrue(overdue.get(0).isOverdue());
+    }
 }
