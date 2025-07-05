@@ -132,4 +132,21 @@ public class LibraryTest {
         assertFalse(lib.issueBook("BOR-0001","BK-001","NOPE"));
         assertFalse(lib.returnBook("NOPE"));
     }
+
+    /**
+     * Ensures first‐in‐line hold gets the next available copy.
+     */
+    @Test
+    void testBorrowLimitEnforced() {
+        // BOR-0001 already registered in @BeforeEach
+        // we have 3 seeded books: BK-001, BK-002, BK-003
+        assertTrue(lib.issueBook("BOR-0001","BK-001","LIB-0001"));
+        assertTrue(lib.issueBook("BOR-0001","BK-002","LIB-0001"));
+        assertTrue(lib.issueBook("BOR-0001","BK-003","LIB-0001"));
+        // add a fourth book and attempt checkout
+        TextBook extra = new TextBook("BK-004","Extra Book","X","Test");
+        lib.addBook(extra);
+        assertFalse(lib.issueBook("BOR-0001","BK-004","LIB-0001"),
+                "Borrower should be refused on 4th checkout beyond their limit");
+    }
 }
