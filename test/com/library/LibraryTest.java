@@ -102,4 +102,17 @@ public class LibraryTest {
         assertEquals(1, overdue.size(), "Should detect exactly one overdue loan");
         assertTrue(overdue.get(0).isOverdue());
     }
+
+    @Test
+    void testRenewalSuccessAndFailure() {
+        lib.issueBook("BOR-0001","BK-001","LIB-0001");
+        Loan loan = borrower.getLoans().get(0);
+        LocalDateTime originalDue = loan.getDueDate();
+        assertTrue(lib.renewLoan("BOR-0001","BK-001"));
+        assertTrue(loan.getDueDate().isAfter(originalDue),
+                "Due date should be extended after renewLoan");
+        loan.setDueDate(LocalDateTime.now().minusDays(1));
+        assertFalse(lib.renewLoan("BOR-0001","BK-001"),
+                "Cannot renew a loan that is already overdue");
+    }
 }
