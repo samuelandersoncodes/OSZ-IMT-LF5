@@ -32,4 +32,14 @@ public class LibraryTest {
         lib.addBook(novel);
         lib.addBook(reference);
     }
+
+    @Test
+    void testAddAndRemoveBook() {
+        TextBook extra = new TextBook("BK-999","Extra","X","S");
+        lib.addBook(extra);
+        assertEquals(4, lib.listBooks().size(), "Should have 4 books after adding one");
+        Book removed = lib.removeBook("BK-999");
+        assertSame(extra, removed, "removeBook should return the exact instance");
+        assertNull(lib.removeBook("NO-SUCH"), "Removing unknown ID should return null");
+    }
 }
