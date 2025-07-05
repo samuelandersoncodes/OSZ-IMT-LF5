@@ -202,7 +202,7 @@ public class LibrarySystem {
     }
 
     /**
-     * Registers a new borrower, prompting for name, email & phone,
+     * Registers a new borrower, prompting for name, email and phone,
      * then auto-generating an ID like BOR-0004, etc.
      */
     private void registerBorrower() {
@@ -218,7 +218,7 @@ public class LibrarySystem {
     }
 
     /**
-     * Registers a new librarian, prompting for name, email & phone,
+     * Registers a new librarian, prompting for name, email and phone,
      * then auto-generating an ID like LIB-0004, etc.
      */
     private void registerLibrarian() {
@@ -256,10 +256,10 @@ public class LibrarySystem {
     }
 
     /**
-     * Lists hold requests for a given book.
-     * If there are none, informs the user and returns.
-     *
-     * @param bookId the ID of the book to look up holds for
+     * Prompts for a book ID and prints the current hold queue
+     * book in the format “Borrower Name  –  Request Date”.
+     * If no holds exist, an informational message is shown and the
+     * user is returned to the main menu.
      */
     private void listHolds() {
         System.out.print("Book ID: ");

@@ -190,7 +190,7 @@ public class Library {
 
     /**
      * @param borrowerId ID of the borrower
-     * @return all loans (active & past) for that borrower
+     * @return all loans (active and past) for that borrower
      */
     public List<Loan> generateUserReport(String borrowerId) {
         return activeLoans.stream()
