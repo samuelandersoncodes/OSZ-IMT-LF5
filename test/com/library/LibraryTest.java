@@ -71,4 +71,14 @@ public class LibraryTest {
         assertEquals(2,
                 lib.listUsers().stream().filter(u -> u instanceof Borrower).count());
     }
+
+    @Test
+    void testIssueAndReturnBehavior() {
+        assertTrue(lib.issueBook("BOR-0001","BK-001","LIB-0001"));
+        assertTrue(textbook.isIssued(), "Book should be marked issued after issueBook");
+        assertFalse(lib.issueBook("BOR-0001","BK-001","LIB-0001"));
+        assertTrue(lib.returnBook("BK-001"), "returnBook should succeed when book is issued");
+        assertFalse(textbook.isIssued(), "Book should no longer be issued after return");
+        assertFalse(lib.returnBook("BK-001"), "Cannot return a book that is not issued");
+    }
 }
