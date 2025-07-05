@@ -60,4 +60,15 @@ public class LibraryTest {
         Library emptyLib = new Library();
         assertTrue(emptyLib.listBooks().isEmpty(), "New library should start with zero books");
     }
+
+    @Test
+    void testRegisterUsersAndList() {
+        long borrowers = lib.listUsers().stream().filter(u -> u instanceof Borrower).count();
+        long librarians = lib.listUsers().stream().filter(u -> u instanceof Librarian).count();
+        assertEquals(1, borrowers);
+        assertEquals(1, librarians);
+        lib.registerBorrower(new Borrower("BOR-0002","Alex","alex@mail.com","557"));
+        assertEquals(2,
+                lib.listUsers().stream().filter(u -> u instanceof Borrower).count());
+    }
 }
