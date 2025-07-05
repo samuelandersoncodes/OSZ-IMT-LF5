@@ -54,4 +54,10 @@ public class LibraryTest {
         assertEquals(1, byId.size());
         assertEquals(reference, byId.get(0));
     }
+
+    @Test
+    void testListBooksEmpty() {
+        Library emptyLib = new Library();
+        assertTrue(emptyLib.listBooks().isEmpty(), "New library should start with zero books");
+    }
 }
