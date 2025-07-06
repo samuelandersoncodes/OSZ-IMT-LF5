@@ -34,7 +34,7 @@
 
 #### Applied OOP Principles
 ##### Inheritance
-- Person → Borrower, Staff; Staff → Clerk, Librarian; Book → TextBook, Novel, Reference
+- Person → Borrower, Staff; Staff → Librarian; Book → TextBook, Novel, Reference
 
 ##### Polymorphism
 - different loan limits (Borrower vs Staff), different loan periods (TextBook 14‑day / Novel 21‑day / Reference 7‑day)
@@ -49,33 +49,58 @@
 
 #### Core Classes
 
-Person (abstract)— id, name, email, phone printInfo()
+- **Person** (abstract)  
+  Fields: `id`, `name`, `email`, `phone`  
+  Methods: `printInfo()`, `getMaxBorrowLimit()` (abstract)
 
-Borrower — extra collections List<Loan> loans, List<HoldRequest> holds; getMaxBorrowLimit() = 3
+- **Borrower** (extends `Person`)  
+  Fields:  
+  └─ `List<Loan> loans` (active & past)  
+  └─ `List<HoldRequest> holds` (pending)  
+  Methods:  
+  └─ `getMaxBorrowLimit()` → 3  
+  └─ inherits `printInfo()`
 
-Staff (abstract) — salary, issuing authority
+- **Librarian** (extends `Person`)  
+  Methods:  
+  └─ `getMaxBorrowLimit()` → 10  
+  └─ inherits `printInfo()`
 
-Clerk — deskNo
+- **Book** (abstract)  
+  Fields: `bookId`, `title`, `author`, `subject`, `isIssued`  
+  Methods:  
+  └─ `getLoanPeriod()` (abstract)  
+  └─ `issue(Loan)`, `returned()`  
+  └─ `printInfo()`
 
-Librarian — officeNo; broader privileges
+- **TextBook** (extends `Book`)  
+  Overrides `getLoanPeriod()` → 14 days
 
-Book (abstract) — bookId, title, author, subject, isIssued; getLoanPeriod(), getBookType()
+- **Novel** (extends `Book`)  
+  Overrides `getLoanPeriod()` → 21 days
 
-TextBook (14‑day) — subject, edition
+- **Reference** (extends `Book`)  
+  Overrides `getLoanPeriod()` → 7 days
 
-Novel (21‑day) — genre, pages
+- **HoldRequest**  
+  Fields: `requestDate`, reference to `Borrower` & `Book`  
+  Methods: getters
 
-Reference (7‑day, in‑house) — volume, edition
+- **Loan**  
+  Fields: `issueDate`, `dueDate`, `returnDate`, reference to `Borrower`, `Book`, `Librarian`  
+  Methods:  
+  └─ `isOverdue()`  
+  └─ `renew()` (extends **current** dueDate by loan period)  
+  └─ `close()` (marks returned)  
+  └─ `printInfo()`
 
-HoldRequest— requestDate, refs to Borrower & Book
+- **Library**  
+  *Service façade* holding all collections (`Map<String,Book>`, `Map<String,Person>`, `List<HoldRequest>`, `List<Loan>`) and orchestrating operations.
 
-Loan — issuedDate, dueDate, dateReturned, finePaid, refs to Borrower, Book, and issuing Staff
+- **LibrarySystem**  
+  *CLI driver* reading user input and invoking `Library` methods.
 
-Library — façade/service holding all collections and orchestrating operations
-
-LibrarySystem — CLI menu driver
-
-#### Key Methods (selected)
+#### Key Methods
 
 - Library
 addBook(), removeBook(), searchBooks(), registerUser(), placeHold(), issueBook(), returnBook(), renewLoan(), displayOverdue(), generateUserReport()
@@ -87,7 +112,7 @@ getMaxBorrowLimit(), printInfo(), canBorrow()
 getLoanPeriod(), issue(), placeOnHold(), returnBook()
 
 - Loan
-isOverdue(), calculateFine(), renew()
+isOverdue(), printInfo(), renew()
 
 ### Data Structure
 - HashMap<String,Book> — book catalogue (key=ISBN/bookId)
@@ -103,11 +128,11 @@ isOverdue(), calculateFine(), renew()
 
 (b) User Management
 
-2.1 Register Borrower 2.2 Register Staff (Clerk/Librarian) 2.3 Display All Users
+2.1 Register Borrower 2.2 Register Staff (Librarian) 2.3 Display All Users
 
 (c) Hold Operations
 
-3.1 Place Hold 3.2 Cancel Hold 3.3 List Holds for Book
+3.1 Place Hold 3.2 List Holds for Book
 
 (d) Borrowing Operations
 
@@ -115,7 +140,7 @@ isOverdue(), calculateFine(), renew()
 
 (e) Reports
 
-5.1 Borrower History 5.2 Popular Books 5.3 Library Statistics
+5.1 Borrower History
 
 (f) Exit
 
