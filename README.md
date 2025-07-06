@@ -2,6 +2,9 @@
 ### Project Overview
 - A terminal-based Library Management System that demonstrates core OOP principles through managing books, users and borrowing operations.
 
+#### Interface
+![Diagram](doc/interface.png)
+
 ### Project Goals
 - Showcase inheritance, polymorphism, encapsulation, and abstraction in a realistic domain.
 - Provide a clean, menu‑driven CLI suitable for OSZ‑IMT coursework and small demos.
@@ -118,12 +121,112 @@ isOverdue(), calculateFine(), renew()
 
 ### Testing
 
-#### Manual testing
-Pre‑populate a mix of TextBook, Novel, Reference records
-Add at least one Borrower, one Clerk, one Librarian
-Seed a loan and a hold request to validate overdue and queue logic
-
 #### Automated testing (unittest result)
 ![Diagram](doc/unittest-result.png)
 
+#### Manual testing
+- Simply run the `Main` class
+- As seen in the interface image on the top of this file, make a choice
 
+###### Add Book
+
+Enter 1
+- Title: “My Test”
+- Author: “Sam”
+- Subject: “Demo”
+- Choose type (1/2/3): 2
+- → “✅ Book: My Test with ID: BK-004 added successfully”
+
+###### Remove Book
+
+- Enter 2
+- Book ID: BK-004
+- → “✅ Book: My Test is removed”
+
+###### Search Books
+
+Enter 3
+- Keyword: Java
+- → Lists all books whose title, author or ID matches “Java”.
+
+###### Display All Books
+
+- Enter 4
+- → Prints every catalog entry (or you get an info; no books if empty).
+
+###### Register Borrower
+
+- Enter 5
+- Name: “Samuel”
+- Email: “samuel@oszt-imt.com”
+- Phone: “12345678553”
+- → “✅ Borrower Samuel registered with ID BOR-0004”
+
+###### Register Librarian
+
+- Enter 6
+- Name: “Bob”
+- Email: “bob@gmail.com”
+- Phone: “12345678551”
+- → “✅ Librarian Bob registered with ID LIB-0004”
+
+###### Display All Users
+
+- Enter 7
+- → Lists all borrowers (BOR-xxxx) and librarians (LIB-xxxx).
+
+###### Place Hold
+
+- First issue a book: do steps 10 then return to menu.
+- Enter 8
+- Borrower ID: BOR-0001
+- Book ID: BK-001
+- → “✅ Hold placed for book ID : BK-001”
+- If you try on an available book, you get ❌…only issued books may be held.
+
+###### List Holds for Book
+
+- Enter 9
+- Book ID: BK-001
+- → Shows each hold: “ • Sam – 2025-07-05” or an info if none.
+
+###### Issue Book
+
+- Enter 10
+- Borrower ID: BOR-0001
+- Book ID: BK-001
+- Librarian ID: LIB-0001
+- → “✅ Issued book with ID : BK-001 to User with ID : BOR-0001”
+- If you re-issue an already issued book, you’ll see ❌…already issued.
+
+###### Renew Loan
+
+- Enter 11
+- Borrower ID: BOR-0001
+- Book ID: BK-001
+- → “✅ Loan renewed! New due date: 2025-07-19” (for a non-overdue loan)
+- If the loan is overdue, you get ❌ Cannot renew—loan … is already overdue.
+
+###### Return Book
+
+- Enter 12
+- Book ID: BK-001
+- → “✅ Returned”
+- If you try to return it again you see ❌ Failed.
+
+###### Overdue Loans
+
+- Enter 13
+- → Lists all loans whose due-date < today, or an info says; There are no overdue loans.
+
+###### Borrower History
+
+- Enter 14
+- Borrower ID: e.g. BOR-0001
+- → If they have past & active loans, you see each; if none, you get an info; Borrower … has not borrowed any books yet.
+- → If the ID doesn’t exist: ❌ No user found with ID: …
+
+###### Exit
+
+- Enter 0
+- → “Good-bye” and the program terminates.
